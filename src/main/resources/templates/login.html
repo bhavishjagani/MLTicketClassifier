@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwiftSort — Sign in</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    .tab-bar{display:flex;background:#f0f1f3;border-radius:10px;padding:3px;margin-bottom:28px;position:relative}
+    .tab-bar::after{content:'';position:absolute;top:3px;left:3px;width:calc(50% - 3px);height:calc(100% - 6px);background:white;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.1);transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+    .tab-bar.on-register::after{transform:translateX(100%)}
+    .tab-btn{flex:1;padding:8px;font-size:13.5px;font-weight:600;font-family:'Inter',sans-serif;background:none;border:none;cursor:pointer;color:#9ca3af;position:relative;z-index:1;transition:color .15s;border-radius:8px}
+    .tab-btn.active{color:#111318}
+    .auth-panel{display:none}.auth-panel.active{display:block;animation:fadeUp .18s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    .input-wrap{position:relative;margin-bottom:12px}
+    .input-wrap input{padding-left:40px}
+    .input-wrap>svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#9ca3af;pointer-events:none}
+    .toggle-pw{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9ca3af;padding:0;display:flex;align-items:center}
+    .toggle-pw:hover{color:#4b5563}
+    .toggle-pw svg{width:16px;height:16px}
+    .pw-bars{display:flex;gap:4px;margin-top:6px}
+    .pw-bar{flex:1;height:3px;border-radius:2px;background:#e5e7eb;transition:background .2s}
+    .pw-bar.weak{background:#e5483a}.pw-bar.fair{background:#d97706}.pw-bar.good{background:#3b6fd4}.pw-bar.strong{background:#059669}
+    .pw-label{font-size:11.5px;color:#9ca3af;margin-top:4px;min-height:16px}
+    .pw-label.weak{color:#e5483a}.pw-label.fair{color:#d97706}.pw-label.good{color:#3b6fd4}.pw-label.strong{color:#059669}
+  </style>
+</head>
+<body class="auth-bg">
+<div class="auth-card">
+  <div class="auth-logo"><div class="auth-logo-mark">S</div></div>
+  <h1 class="auth-title">SwiftSort</h1>
+  <p class="auth-subtitle">AI-powered customer support</p>
+
+  <div class="tab-bar" id="tab-bar">
+    <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Sign in</button>
+    <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Create account</button>
+  </div>
+
+  <div class="auth-panel active" id="panel-login">
+    <div th:if="${param.error}" class="auth-alert error">
+      <svg viewBox="0 0 20 20" fill="currentColor" style="width:15px;height:15px;flex-shrink:0"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>
+      Incorrect email or password.
+    </div>
+    <div th:if="${param.logout}" class="auth-alert success">
+      <svg viewBox="0 0 20 20" fill="currentColor" style="width:15px;height:15px;flex-shrink:0"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+      Signed out successfully.
+    </div>
+    <form th:action="@{/login}" method="post">
+      <div class="input-wrap">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 6.5l7 4.5 7-4.5M3 5h14a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <input type="email" name="username" class="input-field" placeholder="Email address" required autofocus autocomplete="email">
+      </div>
+      <div class="input-wrap">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="8" width="10" height="9" rx="1.5" stroke-linecap="round"/><path d="M7 8V6a3 3 0 016 0v2" stroke-linecap="round"/></svg>
+        <input type="password" name="password" id="login-pw" class="input-field" placeholder="Password" required autocomplete="current-password" style="padding-right:42px">
+        <button type="button" class="toggle-pw" onclick="togglePw('login-pw',this)" tabindex="-1">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 10s3-5.5 7.5-5.5S17.5 10 17.5 10s-3 5.5-7.5 5.5S2.5 10 2.5 10z" stroke-linecap="round"/><circle cx="10" cy="10" r="2"/></svg>
+        </button>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:4px">Sign in</button>
+    </form>
+  </div>
+
+  <div class="auth-panel" id="panel-register">
+    <div id="reg-alert" style="display:none" class="auth-alert error"></div>
+    <div id="reg-ok" style="display:none" class="auth-alert success">Account created! Signing you in…</div>
+    <form id="register-form" onsubmit="handleRegister(event)">
+      <div class="input-wrap">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="7" r="3"/><path d="M4 18a6 6 0 0112 0" stroke-linecap="round"/></svg>
+        <input type="text" id="reg-name" class="input-field" placeholder="Full name" required autocomplete="name">
+      </div>
+      <div class="input-wrap">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 6.5l7 4.5 7-4.5M3 5h14a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <input type="email" id="reg-email" class="input-field" placeholder="Email address" required autocomplete="email">
+      </div>
+      <div class="input-wrap">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="8" width="10" height="9" rx="1.5" stroke-linecap="round"/><path d="M7 8V6a3 3 0 016 0v2" stroke-linecap="round"/></svg>
+        <input type="password" id="reg-pw" class="input-field" placeholder="Password" required autocomplete="new-password" oninput="checkStrength(this.value)" style="padding-right:42px">
+        <button type="button" class="toggle-pw" onclick="togglePw('reg-pw',this)" tabindex="-1">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 10s3-5.5 7.5-5.5S17.5 10 17.5 10s-3 5.5-7.5 5.5S2.5 10 2.5 10z" stroke-linecap="round"/><circle cx="10" cy="10" r="2"/></svg>
+        </button>
+      </div>
+      <div class="pw-bars"><div class="pw-bar" id="b1"></div><div class="pw-bar" id="b2"></div><div class="pw-bar" id="b3"></div><div class="pw-bar" id="b4"></div></div>
+      <p class="pw-label" id="pw-lbl"></p>
+      <div class="input-wrap" style="margin-top:12px">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="8" width="10" height="9" rx="1.5" stroke-linecap="round"/><path d="M7 8V6a3 3 0 016 0v2" stroke-linecap="round"/></svg>
+        <input type="password" id="reg-pw2" class="input-field" placeholder="Confirm password" required autocomplete="new-password">
+      </div>
+      <button type="submit" id="reg-btn" class="btn btn-primary btn-full btn-lg" style="margin-top:4px">Create account</button>
+    </form>
+  </div>
+
+  <p style="text-align:center;margin-top:20px;font-size:12px;color:#9ca3af">&copy; 2026 SwiftSort</p>
+</div>
+
+<script>
+  function switchTab(t){
+    const bar=document.getElementById('tab-bar');
+    ['login','register'].forEach(id=>{
+      document.getElementById('tab-'+id).classList.toggle('active',id===t);
+      document.getElementById('panel-'+id).classList.toggle('active',id===t);
+    });
+    bar.classList.toggle('on-register',t==='register');
+  }
+  function togglePw(id,btn){
+    const el=document.getElementById(id);
+    el.type=el.type==='text'?'password':'text';
+    btn.querySelector('svg').style.opacity=el.type==='text'?'0.4':'1';
+  }
+  function checkStrength(pw){
+    let s=0;
+    if(pw.length>=8)s++;
+    if(/[A-Z]/.test(pw))s++;
+    if(/[0-9]/.test(pw))s++;
+    if(/[^A-Za-z0-9]/.test(pw))s++;
+    const cls=['','weak','fair','good','strong'];
+    const lbl=['','Weak','Fair','Good','Strong'];
+    const c=pw.length?cls[s]||'weak':'';
+    for(let i=1;i<=4;i++)document.getElementById('b'+i).className='pw-bar'+(i<=s&&c?' '+c:'');
+    const el=document.getElementById('pw-lbl');
+    el.textContent=pw.length?lbl[s]||'Weak':'';
+    el.className='pw-label '+c;
+  }
+  async function handleRegister(e){
+    e.preventDefault();
+    const al=document.getElementById('reg-alert'),ok=document.getElementById('reg-ok'),btn=document.getElementById('reg-btn');
+    al.style.display='none';ok.style.display='none';
+    const name=document.getElementById('reg-name').value.trim();
+    const email=document.getElementById('reg-email').value.trim();
+    const pw=document.getElementById('reg-pw').value;
+    const pw2=document.getElementById('reg-pw2').value;
+    if(pw!==pw2){al.textContent='Passwords do not match.';al.style.display='flex';return;}
+    if(pw.length<8){al.textContent='Password must be at least 8 characters.';al.style.display='flex';return;}
+    btn.disabled=true;btn.textContent='Creating account…';
+    try{
+      const res=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password:pw})});
+      if(!res.ok){const b=await res.json().catch(()=>({}));throw new Error(b.message||'Registration failed');}
+      ok.style.display='flex';
+      setTimeout(()=>{
+        const f=document.createElement('form');f.method='POST';f.action='/login';
+        f.innerHTML='<input name="username" value="'+email+'"><input name="password" value="'+pw+'">';
+        document.body.appendChild(f);f.submit();
+      },900);
+    }catch(err){al.textContent=err.message;al.style.display='flex';btn.disabled=false;btn.textContent='Create account';}
+  }
+  if(window.location.hash==='#register')switchTab('register');
+</script>
+</body>
+</html>

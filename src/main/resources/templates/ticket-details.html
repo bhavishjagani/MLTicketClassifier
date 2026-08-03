@@ -1,0 +1,53 @@
+<div th:fragment="ticket-details" class="space-y-8" xmlns:th="http://www.w3.org/1999/xhtml">
+  <div class="flex justify-between items-start">
+    <h1 class="text-2xl font-semibold">Ticket #<span id="ticket-id"></span></h1>
+    <div class="flex gap-2">
+      <select id="status-select" class="input-field w-48" onchange="updateStatus()">
+        <option>NEW</option><option>OPEN</option><option>IN_PROGRESS</option>
+        <option>WAITING_FOR_CUSTOMER</option><option>RESOLVED</option><option>CLOSED</option>
+      </select>
+      <select id="priority-select" class="input-field w-40" onchange="updatePriority()">
+        <option>LOW</option><option>MEDIUM</option><option>HIGH</option><option>CRITICAL</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+      <div class="card">
+        <h2 class="text-lg font-medium mb-4" id="ticket-subject"></h2>
+        <p class="text-gray-600 whitespace-pre-wrap" id="ticket-message"></p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="badge" id="ticket-category"></span>
+          <span class="badge" id="ticket-source"></span>
+          <span class="badge" id="ticket-product"></span>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="text-lg font-medium mb-4">Suggested Response</h2>
+        <p id="suggested-response" class="text-gray-700 bg-blue-50 p-3 rounded-lg"></p>
+        <button class="btn btn-secondary mt-3" onclick="approveResponse()">Approve & Send</button>
+      </div>
+      <div class="card">
+        <h2 class="text-lg font-medium mb-4">Comments</h2>
+        <div id="comments-list" class="space-y-3"></div>
+        <textarea id="comment-input" class="input-field mt-4" rows="3" placeholder="Add internal note..."></textarea>
+        <button class="btn btn-secondary mt-3" onclick="addComment()">Add Note</button>
+      </div>
+    </div>
+    <div class="space-y-6">
+      <div class="card">
+        <h3 class="font-medium mb-3">AI Analysis</h3>
+        <div class="text-sm space-y-2">
+          <div><span class="text-gray-500">Sentiment:</span> <span id="ticket-sentiment"></span></div>
+          <div><span class="text-gray-500">Urgency:</span> <span id="ticket-urgency"></span></div>
+          <div><span class="text-gray-500">Confidence:</span> <span id="ticket-confidence"></span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="font-medium mb-3">Assignment</h3>
+        <select id="agent-select" class="input-field w-full" onchange="assignAgent()"></select>
+      </div>
+    </div>
+  </div>
+  <script th:src="@{/js/tickets.js}"></script>
+</div>

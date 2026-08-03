@@ -1,0 +1,23 @@
+<div th:fragment="profile" class="max-w-xl space-y-8" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h1 class="text-2xl font-semibold">Profile</h1>
+    <form id="profile-form" class="space-y-6">
+        <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" id="profile-name" class="input-field" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="profile-email" class="input-field" disabled>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Profile Picture</label>
+            <div class="flex items-center gap-4">
+                <img id="profile-picture-preview" src="" alt="Preview" class="w-16 h-16 rounded-full object-cover border border-line">
+                <input type="file" id="profile-picture-input" accept="image/*" class="input-field">
+                <button type="button" id="upload-picture-btn" class="btn btn-secondary">Upload</button>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+    <script th:src="@{/js/profile.js}"></script>
+</div>

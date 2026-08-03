@@ -1,0 +1,42 @@
+<div th:fragment="tickets" class="space-y-8" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-semibold">Tickets</h1>
+        <a th:href="@{/tickets/new}" class="btn btn-primary">New Ticket</a>
+    </div>
+
+    <div class="flex flex-wrap gap-4 items-end">
+        <div class="flex-1 min-w-[200px]">
+            <input type="text" placeholder="Search by subject or message..." class="input-field w-full" id="search-input">
+        </div>
+        <select class="input-field w-40" id="status-filter">
+            <option value="">All Statuses</option>
+            <option>NEW</option><option>OPEN</option><option>IN_PROGRESS</option>
+            <option>RESOLVED</option><option>CLOSED</option>
+        </select>
+        <select class="input-field w-40" id="priority-filter">
+            <option value="">All Priorities</option>
+            <option>LOW</option><option>MEDIUM</option><option>HIGH</option><option>CRITICAL</option>
+        </select>
+        <button class="btn btn-secondary" onclick="loadTickets(0)">Apply</button>
+    </div>
+
+    <div class="card overflow-hidden p-0">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th class="text-left p-4 font-medium text-gray-600">ID</th>
+                <th class="text-left p-4 font-medium text-gray-600">Subject</th>
+                <th class="text-left p-4 font-medium text-gray-600">Status</th>
+                <th class="text-left p-4 font-medium text-gray-600">Priority</th>
+                <th class="text-left p-4 font-medium text-gray-600">Sentiment</th>
+                <th class="text-left p-4 font-medium text-gray-600">Agent</th>
+                <th class="text-left p-4 font-medium text-gray-600">Date</th>
+            </tr>
+            </thead>
+            <tbody id="ticket-table-body"></tbody>
+        </table>
+        <div id="pagination" class="p-4 flex justify-between items-center border-t border-gray-200"></div>
+    </div>
+
+    <script th:src="@{/js/tickets.js}"></script>
+</div>

@@ -1,0 +1,9 @@
+<div th:fragment="kb" class="space-y-8" xmlns:th="http://www.w3.org/1999/xhtml">
+  <h1 class="text-2xl font-semibold">Knowledge Base</h1>
+  <div class="flex gap-4">
+    <input type="text" placeholder="Search documents..." class="input-field w-96" id="kb-search">
+    <button class="btn btn-primary" onclick="searchKB()">Search</button>
+  </div>
+  <div id="kb-results" class="space-y-4"></div>
+  <script th:src="@{/js/kb.js}"></script>
+</div>

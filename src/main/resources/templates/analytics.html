@@ -1,0 +1,11 @@
+<div th:fragment="analytics" class="space-y-6" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h1 class="text-2xl font-semibold">Analytics</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="analytics-cards"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div class="card"><h3 class="font-medium mb-2">Category Distribution</h3><canvas id="categoryChart" style="max-height:200px;width:100%"></canvas></div>
+        <div class="card"><h3 class="font-medium mb-2">Priority Distribution</h3><canvas id="priorityChart" style="max-height:200px;width:100%"></canvas></div>
+        <div class="card col-span-2"><h3 class="font-medium mb-2">Sentiment Trend</h3><canvas id="sentimentTrendChart" style="max-height:120px;width:100%"></canvas></div>
+        <div class="card col-span-2"><h3 class="font-medium mb-2">Ticket Volume Trend</h3><canvas id="ticketTrendChart" style="max-height:120px;width:100%"></canvas></div>
+    </div>
+    <script th:src="@{/js/analytics.js}"></script>
+</div>

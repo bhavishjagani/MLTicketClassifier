@@ -1,0 +1,38 @@
+<header th:fragment="navbar" xmlns:th="http://www.thymeleaf.org" class="app-navbar">
+  <div class="navbar-search">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="9" r="6"/><path d="M17 17l-3.5-3.5" stroke-linecap="round"/></svg>
+    <input type="text" id="global-search" placeholder="Search tickets…" onkeydown="if(event.key==='Enter'&&this.value.trim())window.location.href='/tickets?search='+encodeURIComponent(this.value.trim())">
+  </div>
+  <div class="navbar-actions">
+    <a th:href="@{/tickets/new}" class="btn btn-primary btn-sm" style="gap:5px">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" style="width:12px;height:12px"><path d="M8 3v10M3 8h10" stroke-linecap="round"/></svg>
+      New ticket
+    </a>
+    <div style="position:relative" id="user-menu">
+      <button class="avatar-btn" id="nav-avatar-btn" onclick="Swift.toggleDropdown()"><span id="avatar-initials">A</span></button>
+      <div id="nav-dropdown" class="dropdown hidden">
+        <a th:href="@{/profile}">Profile</a>
+        <a th:href="@{/settings}">Settings</a>
+        <div class="divider"></div>
+        <a th:href="@{/logout}" class="danger">Sign out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script>
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('user-menu');
+    if (!menu) return;
+    const dropdown = document.getElementById('nav-dropdown');
+    if (!dropdown.classList.contains('hidden') && !menu.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+  document.addEventListener('DOMContentLoaded', async function() {
+    try {
+      const user = await Swift.api('/api/users/me');
+      const initials = Swift.initials(user.name);
+      document.getElementById('avatar-initials').textContent = initials;
+    } catch (_) {}
+  });
+</script>
